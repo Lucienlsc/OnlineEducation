@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- The above 4 meta tags *Must* come first in the head; any other head content must come *after* these tags -->
+
+    <!-- Title -->
+    <title>Clever - Education &amp; Courses Template | Single Course</title>
+
+    <!-- Favicon -->
+    <link rel="icon" th:href="@{/dist/img/core-img/favicon.ico}">
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" th:href="@{/dist/css/style.css}" href="/dist/css/style.css">
+
+    <!-- Theme style -->
+    <link rel="stylesheet" th:href="@{/dist/css/adminlte.min.css}" href="/dist/css/adminlte.min.css">
+
+    <link rel="stylesheet" th:href="@{/dist/css/video.css}" href="/dist/css/video.css">
+
+    <link rel="stylesheet" th:href="@{/dist/css/base.css}" href="/dist/css/base.css">
+
+    <link rel="stylesheet" th:href="@{/dist/css/test.css}" href="/dist/css/test.css">
+
+    <link rel="stylesheet" th:href="@{/dist/css/comment.css}" href="/dist/css/comment.css">
+
+
+</head>
+
+<body onload="load_name()">
+    <!-- Preloader -->
+    <div id="preloader">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- ##### Header Area Start ##### -->
+    <header class="header-area">
+
+        <!-- Navbar Area -->
+        <div class="clever-main-menu">
+            <div class="classy-nav-container breakpoint-off">
+                <!-- Menu -->
+                <nav class="classy-navbar justify-content-between" id="cleverNav">
+
+                    <!-- Logo -->
+                    <a class="nav-brand" href="index.html"><img alt="" th:src="@{/dist/img/logo.png}"/></a>
+
+                    <!-- Navbar Toggler -->
+                    <div class="classy-navbar-toggler">
+                        <span class="navbarToggler"><span></span><span></span><span></span></span>
+                    </div>
+
+                    <!-- Menu -->
+                    <div class="classy-menu">
+
+                        <!-- Close Button -->
+                        <div class="classycloseIcon">
+                            <div class="cross-wrap"><span class="top"></span><span class="bottom"></span></div>
+                        </div>
+
+                        <!-- Nav Start -->
+                        <div class="classynav">
+                            <!-- 注册 / 登录 -->
+                            <div class="register-login-area" th:if="${sid} == null">
+                                <a href="#" class="btn" onclick="registered()">注册</a>
+                                <a th:href="@{/login.html}" class="btn active">登录</a>
+                            </div>
+                            <div class="login-state d-flex align-items-center" th:if="${sid} ne null">
+                                <div class="user-name mr-30">
+                                    <div class="dropdown">
+                                        <a class="dropdown-toggle" href="#" role="button" id="userName" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">学生姓名</a>
+                                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userName">
+                                            <a class="dropdown-item"  onclick="udpPassword()" style="cursor: pointer">修改密码</a>
+                                            <a class="dropdown-item" href="#"  onclick="logout()">退出登录</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Nav End -->
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </header>
+    <!-- ##### Header Area End ##### -->
+
+    <div class="content">
+        <!-- 模态框（Modal） -->
+        <div class="modal fade" id="modalPassword" tabindex="-1" role="dialog" aria-labelledby="modalEditLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <input type="hidden" id="userId" value="0">
+                            <div class="form-group">
+                                <label for="passwordEdit" class="control-label">新密码:</label>
+                                <input type="text" class="form-control" id="passwordEdit">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                        <button type="button" class="btn btn-primary" id="editButton">确认</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /.modal -->
+
+    <!-- ##### Single Course Intro Start ##### -->
+    <div class="single-course-intro d-flex align-items-center justify-content-center" th:style="'background-image: url('+@{/dist/img/bg1.jpg}+')'" >
+        <!-- Content -->
+        <div class="single-course-intro-content text-center">
+            <!-- Ratings -->
+            <div class="ratings">
+                <i class="fa fa-star" aria-hidden="true"></i>
+                <i class="fa fa-star" aria-hidden="true"></i>
+                <i class="fa fa-star" aria-hidden="true"></i>
+                <i class="fa fa-star" aria-hidden="true"></i>
+                <i class="fa fa-star" aria-hidden="true"></i>
+            </div>
+            <input type="hidden" th:value="${course.id}" id="courseID" value="1">
+            <h4 id="courseName" th:text="${course.courseName}">课程名称</h4>
+            <div class="meta d-flex align-items-center justify-content-center">
+                <span style="font-size: 14px">教师:</span>
+                <span style="font-size: 14px" id="teacherName" th:text="${course.teacher.teacherName}">教师姓名</span>
+            </div>
+            <p class="" id="description" th:text="${course.description}">课程简介</p>
+        </div>
+    </div>
+    <!-- ##### Single Course Intro End ##### -->
+
+    <!-- ##### Courses Content Start ##### -->
+    <div class="single-course-content section-padding-100">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 col-lg-8">
+                    <div class="course--content">
+
+                        <div class="clever-tabs-content">
+                            <ul class="nav nav-tabs" id="myTab" role="tablist" >
+                                <li class="nav-item">
+                                    <a class="nav-link active" id="tab--1" data-toggle="tab" href="#tab1" role="tab" aria-controls="tab1" aria-selected="false">视&nbsp&nbsp频</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="tab--2" data-toggle="tab" href="#tab2" role="tab" aria-controls="tab2" aria-selected="true">课&nbsp&nbsp件</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="tab--3" data-toggle="tab" href="#tab3" role="tab" aria-controls="tab3" aria-selected="true">评&nbsp&nbsp论</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="tab--4" data-toggle="tab" href="#tab4" role="tab" aria-controls="tab4" aria-selected="true">测&nbsp&nbsp试</a>
+                                </li>
+
+                            </ul>
+
+                            <div class="tab-content" id="myTabContent">
+                                <!-- Tab Text -->
+                                <div class="tab-pane fade show active" id="tab1" role="tabpanel" aria-labelledby="tab--1">
+                                    <div class="clever-description">
+                                        <div class="Dplayer_box about-course">
+                                            <div class="player_av">
+                                                <div id="player1"></div>
+                                            </div>
+                                        </div>
+                                        <div class="alert_back">加载中</div>
+                                    </div>
+                                </div>
+
+                                <!-- Tab Text -->
+                                <div class="tab-pane fade" id="tab2" role="tabpanel" aria-labelledby="tab--2">
+                                    <div class="clever-curriculum">
+                                        <!-- About Curriculum -->
+                                        <div class="about-curriculum mb-30">
+                                            <ul class="features-list" th:if="${coursewares} ne null" th:each="courseware:${coursewares}" >
+                                                <li>
+                                                    <i class="fa fa-file" aria-hidden="true"></i>&nbsp&nbsp
+                                                    <a th:href="${courseware.coursewareURL}" th:text="${courseware.title}+${courseware.extension}"></a>
+                                                    <input type="hidden" th:value="${courseware.coursewareURL}" id="coursewareURL" value="0">
+                                                </li>
+                                            </ul>
+                                            <div  th:if="${coursewares} == null">
+                                                <div class="features-list">
+                                                    <h5 style="color: gray;">暂时没有课件，请等待教师上传</h5>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Tab Text -->
+                                <div class="tab-pane fade" id="tab3" role="tabpanel" aria-labelledby="tab--3">
+                                    <div class="commentAll">
+                                        <!--评论区域 begin-->
+                                        <div class="reviewArea clearfix">
+                                            <textarea class="content comment-input" placeholder="Please enter a comment&hellip;" onkeyup="keyUP(this)"></textarea>
+                                            <a href="javascript:;" class="plBtn" th:if="${sid} ne null" style="background-color: #007bff">评论</a>
+                                            <a href="javascript:;" class="plBtn" th:if="${sid} == null" style="background-color: #007bff" onclick="toLogin()">评论</a>
+                                        </div>
+                                        <!--评论区域 end-->
+                                        <!--回复区域 begin-->
+                                        <div class="comment-show" th:if="${messages} ne null" th:each="message:${messages}">
+                                            <div class="comment-show-con clearfix">
+                                                <div class="comment-show-con-list pull-left clearfix">
+                                                    <input type="hidden" th:value="${message.id}" value="0" class="messageID">
+                                                    <div class="pl-text clearfix">
+                                                        <a href="#" class="comment-size-name" th:text="${message.userName}+':'">评论人：</a>
+                                                        <span class="my-pl-con" th:text="${message.content}">评论内容</span>
+                                                    </div>
+                                                    <div class="date-dz">
+                                                        <span class="date-dz-left pull-left comment-time" th:text="${#dates.format(message.releaseTime,'yyyy-MM-dd HH:mm:ss')}">发送时间</span>
+                                                        <div class="date-dz-right pull-right comment-pl-block">
+                                                            <a href="#" class="removeBlock">删除</a>
+                                                            <a href="#" class="date-dz-pl pl-hf hf-con-block pull-left">回复</a>
+                                                        </div>
+                                                    </div>
+                                                    <div class="hf-list-con" style="display: block">
+                                                        <div class="all-pl-con" th:if="${message.child} ne null">
+                                                            <div th:each="children : ${message.child}">
+                                                                <div class="pl-text hfpl-text clearfix">
+                                                                    <a href="#" class="comment-size-name" th:text="${children.userName}">我的名字 : </a>
+                                                                    <span class="my-pl-con">回复@<a href="#" class="atName" th:text="${message.userName}">atName</a></span>
+                                                                    <span class="my-pl-con" th:text="${children.content}">content</span>
+                                                                </div>
+                                                                <div class="date-dz">
+                                                                    <span class="date-dz-left pull-left comment-time" th:text="${children.releaseTime}">now</span>
+                                                                    <div class="date-dz-right pull-right comment-pl-block">
+                                                                        <a href="javascript:;" class="removeBlock">删除</a>
+                                                                        <a href="javascript:;" class="date-dz-pl pl-hf hf-con-block pull-left">回复</a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div  th:if="${messages} == null">
+                                            <div class="comment-show">
+                                                <h5 style="color: gray;">暂时没有评论</h5>
+                                            </div>
+                                        </div>
+                                        <!--回复区域 end-->
+                                    </div>
+                                </div>
+
+                                <!-- Tab Text -->
+                                <div class="tab-pane fade" id="tab4" role="tabpanel" aria-labelledby="tab--4" >
+                                    <div th:if="${tests} ne null" class="test_content_nr clever-curriculum" style="box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);">
+                                        <ul>
+                                            <li  th:each="test:${tests}" th:id="${test.id}">
+                                                <div class="test_content_nr_tt">
+                                                    <i th:text="${test.id}">1</i><span th:text="'('+${test.score}+'分)'">(1分)</span>
+                                                    <span type="text" th:text="${test.testName}"></span>
+                                                    <input type="hidden" th:value="${test.id}" id="testID">
+                                                    <input type="hidden" th:id="'answer'+${test.id}" th:value="${test.answer}">
+                                                </div>
+                                                <div class="test_content_nr_main">
+                                                    <ul>
+                                                        <li class="option">
+                                                            <input type="radio" class="radioOrCheck" th:name="'answer'+${test.id}" value="A" autocomplete="off" th:id="'option_1_'+${test.id}"/>
+                                                            <label th:for="'option_1_'+${test.id}">A.<p class="ue" style="display: inline;" th:text="${test.optionA}">选项A</p></label>
+                                                        </li>
+                                                        <li class="option">
+                                                            <input type="radio" class="radioOrCheck" th:name="'answer'+${test.id}" value="B" autocomplete="off" th:id="'option_2_'+${test.id}"/>
+                                                            <label th:for="'option_2_'+${test.id}">B.<p class="ue" style="display: inline;" th:text="${test.optionB}">选项B</p></label>
+                                                        </li>
+                                                        <li class="option">
+                                                            <input type="radio" class="radioOrCheck" th:name="'answer'+${test.id}" value="C" autocomplete="off" th:id="'option_3_'+${test.id}"/>
+                                                            <label th:for="'option_3_'+${test.id}">C.<p class="ue" style="display: inline;" th:text="${test.optionC}">选项C</p></label>
+                                                        </li>
+                                                        <li class="option">
+                                                            <input type="radio" class="radioOrCheck" th:name="'answer'+${test.id}" value="D" autocomplete="off" th:id="'option_4_'+${test.id}"/>
+                                                            <label th:for="'option_4_'+${test.id}">D.<p class="ue" style="display: inline;" th:text="${test.optionD}">选项D</p></label>
+                                                        </li>
+                                                        <li >
+                                                            <h5 style="float: left" hidden th:id="'right'+${test.id}">正确：<i class="fa fa-check" aria-hidden="true" style="color: #FF0000;font-size: x-large"></i></h5>
+                                                            <h5 style="float: left" hidden th:id="'wrong'+${test.id}">错误：<i class="fa fa-close" aria-hidden="true" style="color: #FF0000;font-size: x-large"></i></h5>
+                                                            <button type="button" class="btn btn btn-primary" style="margin-left: 550px;" th:onclick="'javascript:getAnswer(\''+${test.id}+'\')'">确定</button>
+                                                            <script  th:inline="javascript">
+                                                                function getAnswer(id) {
+                                                                    var answer = 'answer'+id;
+                                                                    var myAnswer = $('input[name='+answer+']:checked').val();
+                                                                    var correctAnswer = $("#" + answer + "").val();
+                                                                    var right = 'right'+id;
+                                                                    var wrong = 'wrong'+id
+                                                                    if (myAnswer == null) {
+                                                                        swal("请选择你的答案", {
+                                                                            icon: "warning",
+                                                                        });
+                                                                    } else {
+                                                                        if (myAnswer == correctAnswer) {
+                                                                            $("#" + right + "").removeAttr("hidden");
+                                                                            $("#" + wrong + "").attr("hidden",true);
+                                                                        }
+                                                                        if (myAnswer != correctAnswer) {
+                                                                            $("#" + right + "").attr("hidden",true);
+                                                                            $("#" + wrong + "").removeAttr("hidden");
+                                                                        }
+                                                                    }
+                                                                }
+                                                            </script>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="clever-curriculum" th:if="${tests} == null">
+                                        <!-- About Curriculum -->
+                                        <div class="about-curriculum mb-30">
+                                            <div>
+                                                <div class="features-list">
+                                                    <h5 style="color: gray;">暂时没有测试，请等待教师上传</h5>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-lg-4">
+                    <div class="course-sidebar" style="box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);">
+                        <!-- Widget -->
+                        <div class="sidebar-widget">
+                            <h4>课程视频</h4>
+                            <input type="hidden" id="videoURL" th:value="${video.videoURL}" value="0">
+                            <ul class="features-list" th:each="courseVideo:${courseVideos}">
+                                <li>
+                                    <i class="fa fa-video-camera" aria-hidden="true"></i>
+                                    <a th:href="@{'/courses/detail/videoPlay/'+${course.id}+'/'+${courseVideo.id}+'.html'}" th:text="${courseVideo.videoName}"></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ##### Courses Content End ##### -->
+
+    <!-- ##### Footer Area Start ##### -->
+    <footer class="footer-area">
+        <!-- Top Footer Area -->
+        <div class="top-footer-area">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <!-- Footer Logo -->
+                        <div class="footer-logo">
+                            <a href="#"><img th:src="@{/dist/img/logo2.png}" alt="" src="dist/img/logo2.png"></a>
+                        </div>
+                        <!-- Copywrite -->
+                        <p><a href="#"><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                            Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This Web is made by LSC
+                            <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Footer Area -->
+        <div class="bottom-footer-area d-flex justify-content-between align-items-center">
+            <!-- Contact Info -->
+            <div class="contact-info">
+                <a href="#"><span>Phone:</span> +86 18768171767</a>
+                <a href="#"><span>Email:</span> xmblsc@163.com</a>
+            </div>
+            <!-- Follow Us -->
+            <div class="follow-us">
+                <span>Follow us</span>
+                <a href="#"><i class="fa fa-qq" aria-hidden="true"></i></a>
+                <a href="#"><i class="fa fa-weixin" aria-hidden="true"></i></a>
+                <a href="#"><i class="fa fa-weibo" aria-hidden="true"></i></a>
+            </div>
+        </div>
+    </footer>
+    <!-- ##### Footer Area End ##### -->
+
+    <!-- ##### All Javascript Script ##### -->
+    <!-- jQuery-2.2.4 js -->
+    <script type="text/javascript" th:src="@{/plugins/jquery/jquery.min.js}" src="plugins/jquery/jquery.min.js"></script>
+    <!-- Popper js -->
+    <script type="text/javascript" th:src="@{/plugins/popper/umd/popper.min.js}" src="plugins/popper/umd/popper.min.js"></script>
+    <!-- Bootstrap js -->
+    <script type="text/javascript" th:src="@{/plugins/bootstrap/js/bootstrap.min.js}" src="plugins/bootstrap/js/bootstrap.min.js"></script>
+    <!-- All Plugins js -->
+    <script type="text/javascript" th:src="@{/plugins/plugins.js}" src="plugins/plugins.js"></script>
+    <!--sweet alert-->
+    <script type="text/javascript" th:src="@{/plugins/sweetalert/sweetalert.min.js}" src="plugins/sweetalert/sweetalert.min.js"></script>
+    <!--DPlayer-->
+    <script type="text/javascript" th:src="@{/plugins/DPlayer/DPlayer.min.js}" src="plugins/DPlayer/DPlayer.min.js"></script>
+    <script type="text/javascript" th:src="@{/plugins/flexText/flexText.js}" src="plugins/flexText/flexText.js"></script>
+    <script type="text/javascript" th:src="@{/dist/js/public.js}" src="dist/js/public.js"></script>
+    <!-- Active js -->
+    <script type="text/javascript" th:src="@{/dist/js/active.js}" src="dist/js/active.js"></script>
+    <script type="text/javascript" th:src="@{/dist/js/adminlte.js}" src="dist/js/adminlte.js"></script>
+    <script type="text/javascript">
+        function load_name(){
+            // 获取右上角登录的用户名
+            var userID=localStorage.getItem("userName");
+
+            $.get("/students/getName/" + userID, function (r) {
+                if (r.resultCode == 200 && r.data != null) {
+                    //填充数据
+                    $('#userName').html(r.data.studentName);
+                }
+            });
+        }
+
+        function udpPassword() {
+            reset();
+            //获取到当前需要修改的记录的主键
+            var userId = localStorage.getItem("userName");//获取登录学生的学号
+            $("#userId").val(userId);
+            //modal框给显示出来
+            $("#modalPassword").modal('show');
+        }
+
+        $('#editButton').click(function () {
+            var userId = $('#userId').val();
+            var password = $('#passwordEdit').val();
+            var data = {"studentID": userId, "studentPassword": password};
+            $.ajax({
+                type: 'POST',//方法类型
+                dataType: "json",//预期服务器返回的数据类型
+                url: 'students/updatePassword',//url
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(data),
+                success: function (result) {
+                    if (result.resultCode == 200) {
+                        swal("修改成功",{
+                            icon:"success",
+                        });
+                        $('#modalPassword').modal('hide');
+                        reload();
+                    }
+                    else {
+                        swal(result.message,{
+                            icon:"error",
+                        });
+                    }
+                    ;
+                },
+                error: function () {
+                    swal("操作失败",{
+                        icon:"error",
+                    });
+                }
+            });
+        })
+
+
+            var videoURL = $('#videoURL').val();
+            var dp = new DPlayer({
+                element: document.getElementById('player1'),
+                video: {
+                    url: videoURL,
+
+                },
+                danmaku: {
+                    id: 'demo',
+                    api: 'https://dplayer.alone88.cn/',
+                    // addition: ['https://api.prprpr.me/dplayer/bilibili?aid=15572523']
+                }
+            });
+
+            // 弹出框
+            function alert_back(text) {
+                $(".alert_back").html(text).show();
+                setTimeout(function () {
+                    $(".alert_back").fadeOut();
+                }, 1200)
+            }
+
+
+        /**
+         * 重置 使得上一次输入的内容在重新打开输入框时被清除
+         **/
+        function reset() {
+            $('#userId').val('');
+            $('#passwordEdit').val('');
+        }
+
+        // 评论部分begin
+        <!--textarea高度自适应-->
+        $(function () {
+            $('.content').flexText();
+        });
+        <!--textarea限制字数-->
+        function keyUP(t){
+            var len = $(t).val().length;
+            if(len > 139){
+                $(t).val($(t).val().substring(0,140));
+            }
+        }
+        <!--点击评论创建评论条-->
+        $('.commentAll').on('click','.plBtn',function(){
+            var myDate = new Date();
+            //获取当前年
+            var year=myDate.getFullYear();
+            //获取当前月
+            var month=myDate.getMonth()+1;
+            //获取当前日
+            var date=myDate.getDate();
+            var h=myDate.getHours();       //获取当前小时数(0-23)
+            var m=myDate.getMinutes();     //获取当前分钟数(0-59)
+            if(m<10) m = '0' + m;
+            var s=myDate.getSeconds();
+            if(s<10) s = '0' + s;
+            var now=year+'-'+month+"-"+date+" "+h+':'+m+":"+s;
+            //获取输入内容
+            var oSize = $(this).siblings('.flex-text-wrap').find('.comment-input').val();
+            console.log(oSize);
+            //获取当前用户姓名
+            var userName = $('#userName').html();
+            //动态创建评论模块
+            oHtml = '<div class="comment-show-con clearfix"><div class="comment-show-con-list pull-left clearfix"><div class="pl-text clearfix"> <a href="#" class="comment-size-name">'+userName+' : ' +
+                '</a> <span class="my-pl-con">&nbsp;'+ oSize +'</span> </div> <div class="date-dz"> <span class="date-dz-left pull-left comment-time">'+now+'</span> <div class="date-dz-right pull-right comment-pl-block"><a href="javascript:;" class="removeBlock">删除</a> <a href="javascript:;" class="date-dz-pl pl-hf hf-con-block pull-left">回复</a> </div><div class="hf-list-con"></div></div> </div>';
+            if(oSize.replace(/(^\s*)|(\s*$)/g, "") != ''){
+                $('.commentAll').append(oHtml);
+                $(this).siblings('.flex-text-wrap').find('.comment-input').prop('value','').siblings('pre').find('span').text('');
+            }
+            //把新增的评论写入数据库
+
+            var courseID = $('#courseID').val();
+            var data = {"courseID": courseID, "content": oSize,"userName": userName};
+            $.ajax({
+                type: 'POST',//方法类型
+                enctype:'multipart/form-data',
+                dataType: "json",//预期服务器返回的数据类型
+                url: 'messages/save',//url
+                contentType: "application/json; charset=utf-8",
+                beforeSend: function (request) {
+                    //设置header值
+                    request.setRequestHeader("token", getCookie("token"));
+                },
+                data: JSON.stringify(data),
+                success: function (result) {
+                    if (result.resultCode == 200) {
+                        console.log("评论成功");
+                    }
+                    else {
+                        // console.log(data);
+                        console.log("评论失败");
+                    }
+                    ;
+                },
+                error: function () {
+                    console.log(data);
+                    swal("操作失败",{
+                        icon:"error",
+                    });
+                }
+            });
+        });
+
+        <!--点击回复动态创建回复块-->
+        $('.comment-show').on('click','.pl-hf',function(){
+            //获取回复人的名字
+            var fhName = $(this).parents('.date-dz-right').parents('.date-dz').siblings('.pl-text').find('.comment-size-name').html();
+            //回复@
+            var fhN = '回复@'+fhName;
+            //var oInput = $(this).parents('.date-dz-right').parents('.date-dz').siblings('.hf-con');
+            var fhHtml = '<div class="hf-con pull-left"> <textarea class="content comment-input hf-input" placeholder="" onkeyup="keyUP(this)"></textarea> <a href="javascript:;" class="hf-pl">评论</a></div>';
+            //显示回复
+            if($(this).is('.hf-con-block')){
+                $(this).parents('.date-dz-right').parents('.date-dz').append(fhHtml);
+                $(this).removeClass('hf-con-block');
+                $('.content').flexText();
+                $(this).parents('.date-dz-right').siblings('.hf-con').find('.pre').css('padding','6px 15px');
+                //console.log($(this).parents('.date-dz-right').siblings('.hf-con').find('.pre'))
+                //input框自动聚焦
+                $(this).parents('.date-dz-right').siblings('.hf-con').find('.hf-input').val('').focus().val(fhN);
+            }else {
+                $(this).addClass('hf-con-block');
+                $(this).parents('.date-dz-right').siblings('.hf-con').remove();
+            }
+        });
+        <!--评论回复块创建-->
+        $('.comment-show').on('click','.hf-pl',function(){
+            var oThis = $(this);
+            var myDate = new Date();
+            //获取当前年
+            var year=myDate.getFullYear();
+            //获取当前月
+            var month=myDate.getMonth()+1;
+            //获取当前日
+            var date=myDate.getDate();
+            var h=myDate.getHours();       //获取当前小时数(0-23)
+            var m=myDate.getMinutes();     //获取当前分钟数(0-59)
+            if(m<10) m = '0' + m;
+            var s=myDate.getSeconds();
+            if(s<10) s = '0' + s;
+            var now=year+'-'+month+"-"+date+" "+h+':'+m+":"+s;
+            //获取输入内容
+            var oHfVal = $(this).siblings('.flex-text-wrap').find('.hf-input').val();
+            console.log(oHfVal)
+            var oHfName = $(this).parents('.hf-con').parents('.date-dz').siblings('.pl-text').find('.comment-size-name').html();
+            var oAllVal = '回复@'+oHfName;
+            if(oHfVal.replace(/^ +| +$/g,'') == '' || oHfVal == oAllVal){
+
+            }else {
+                $.getJSON("json/pl.json",function(data){
+                    var oAt = '';
+                    var oHf = '';
+                    $.each(data,function(n,v){
+                        delete v.hfContent;
+                        delete v.atName;
+                        var arr;
+                        var ohfNameArr;
+                        if(oHfVal.indexOf("@") == -1){
+                            data['atName'] = '';
+                            data['hfContent'] = oHfVal;
+                        }else {
+                            arr = oHfVal.split(':');
+                            ohfNameArr = arr[0].split('@');
+                            data['hfContent'] = arr[1];
+                            data['atName'] = ohfNameArr[1];
+                        }
+                        if(data.atName == ''){
+                            oAt = data.hfContent;
+                        }else {
+                            oAt = '回复<a href="#" class="atName">@'+data.atName+'</a> : '+data.hfContent;
+                        }
+                        oHf = data.hfName;
+                    });
+
+                    var oHtml = '<div class="all-pl-con"><div class="pl-text hfpl-text clearfix"><a href="#" class="comment-size-name">我的名字 : </a><span class="my-pl-con">'+oAt+
+                        '</span></div><div class="date-dz"> <span class="date-dz-left pull-left comment-time">'+now+'</span> <div class="date-dz-right pull-right comment-pl-block"> <a href="javascript:;" class="removeBlock">删除</a> ' +
+                        '<a href="javascript:;" class="date-dz-pl pl-hf hf-con-block pull-left">回复</a></div> </div></div>';
+                    oThis.parents('.hf-con').parents('.comment-show-con-list').find('.hf-list-con').css('display','block').prepend(oHtml) && oThis.parents('.hf-con').siblings('.date-dz-right').find('.pl-hf').addClass('hf-con-block') && oThis.parents('.hf-con').remove();
+
+                });
+
+
+            }
+        });
+
+        function toLogin(){
+            swal({
+                title:"请您先登录",
+                icon:"warning",
+                buttons: {
+                    cancel: "取消",
+                    confirm:{
+                        text:"登录",
+                        className:"confirmClass",
+                    }
+                },
+            }).then(function (isOk) {
+                if(!isOk){//如果点击取消
+                    swal.close();
+                }else{
+                    window.location.href = "/login.html";
+                }
+            })
+        }
+
+        <!--删除评论块-->
+        $('.commentAll').on('click','.removeBlock',function(){
+            var oT = $(this).parents('.date-dz-right').parents('.date-dz').parents('.all-pl-con');
+            if(oT.siblings('.all-pl-con').length >= 1){
+                oT.remove();
+            }else {
+                $(this).parents('.date-dz-right').parents('.date-dz').parents('.all-pl-con').parents('.hf-list-con').css('display','none')
+                oT.remove();
+            }
+            $(this).parents('.date-dz-right').parents('.date-dz').parents('.comment-show-con-list').parents('.comment-show-con').remove();
+
+        })
+
+        function registered(){
+            //隐藏错误提示框
+            $('.alert-danger').css("display", "none");
+            reset();
+            $("#modalRegister").modal('show');
+        }
+
+        $('#saveButton').click(function () {
+            var userName = $('#userNameNew').val();
+            var password = $('#passwordNew').val();
+            var studentID = $('#studentIDNew').val();
+            var studentSex = $("input[name='userSex']:checked").val();
+            var studentClass = $('#studentClassNew').val();
+            var data = {"studentName": userName, "studentPassword": password,"studentID":studentID,
+                "studentSex":studentSex,"studentClass":studentClass};
+            $.ajax({
+                type: 'POST',//方法类型
+                dataType: "json",//预期服务器返回的数据类型
+                url: '../students/save',//url
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(data),
+                success: function (result) {
+                    if (result.resultCode == 200) {
+                        swal("注册成功",{
+                            icon:"success",
+                        });
+                        $('#modalRegister').modal('hide');
+                    }
+                    else {
+                        swal(result.message,{
+                            icon:"error",
+                        });
+                    }
+                    ;
+                },
+                error: function () {
+                    swal("操作失败",{
+                        icon:"error",
+                    });
+                }
+            });
+
+        })
+        function logout() {
+            delCookie("token");
+            window.location.href = "/index.html";
+        }
+
+        /**
+         * 重置 使得上一次输入的内容在重新打开输入框时被清除
+         **/
+        function reset() {
+            $('#userNameNew').val('');
+            $('#passwordNew').val('');
+            $('#studentClassNew').val('');
+            $('#studentIDNew').val('');
+            $('#sex1').removeClass("active");
+            $('#sex2').removeClass("active");
+
+        }
+    </script>
+</body>
+
+</html>
+
+
+
+
+

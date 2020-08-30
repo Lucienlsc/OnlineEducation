@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>测试信息管理页</title>
+    <!-- jqgrid ui -->
+    <link href="../../static/plugins/jqgrid-5.3.0/ui.jqgrid-bootstrap4.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="../../static/plugins/bootstrap/css/bootstrap.css">
+    <!-- sweet alert-->
+    <link rel="stylesheet" href="../../static/plugins/sweetalert/sweetalert.css">
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="../../static/plugins/font-awesome/css/font-awesome.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="../../static/dist/css/adminlte.min.css">
+    <style>
+        .ui-jqgrid tr.jqgrow td {
+            white-space: normal !important;
+            height:auto;
+            display: table-cell;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body class="hold-transition sidebar-mini" onload="load_name()">
+<div class="wrapper">
+
+    <!-- Navbar -->
+    <nav class="main-header navbar navbar-expand bg-white navbar-light border-bottom">
+        <!-- Left navbar links -->
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" data-widget="pushmenu" href="#"><i class="fa fa-bars"></i></a>
+            </li>
+
+        </ul>
+        <!-- Right navbar links -->
+        <ul class="navbar-nav ml-auto">
+            <!-- Messages Dropdown Menu -->
+            <li class="nav-item dropdown">
+                <a class="nav-link"  href="#" onclick="logout()">
+                    <i class="fa fa-sign-out">退出登录</i>
+                </a>
+            </li>
+
+        </ul>
+    </nav>
+    <!-- /.navbar -->
+    <!-- Main Sidebar Container -->
+    <aside class="main-sidebar sidebar-dark-primary elevation-4">
+
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <!-- Sidebar user panel (optional) -->
+            <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+                <div class="info">
+                    <span class="text-white" id="adminName"></span>
+                </div>
+            </div>
+
+            <!-- Sidebar Menu -->
+            <nav class="mt-2">
+                <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
+                    data-accordion="false">
+                    <!-- Add icons to the links using the .nav-icon class
+                         with font-awesome or any other icon font library -->
+
+
+                    <li class="nav-header">管理模块</li>
+                    <li class="nav-item">
+                        <a href="adminStudent.html" class="nav-link">
+                            <i class="fa  fa-user-circle-o nav-icon"></i>
+                            <p>学生用户管理</p>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="adminTeacher.html" class="nav-link ">
+                            <i class="fa fa-user-circle nav-icon"></i>
+                            <p>教师用户管理</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="adminCourse.html" class="nav-link ">
+                            <i class="fa fa-book nav-icon"></i>
+                            <p>课程信息管理</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="adminVideo.html" class="nav-link ">
+                            <i class="fa fa-video-camera nav-icon"></i>
+                            <p>视频信息管理</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="adminCourseware.html" class="nav-link ">
+                            <i class="fa fa-file nav-icon"></i>
+                            <p>课件信息管理</p>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="adminMessage.html" class="nav-link ">
+                            <i class="fa fa-comment nav-icon"></i>
+                            <p>评论信息管理</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="adminTest.html" class="nav-link active">
+                            <i class="fa fa-pencil nav-icon"></i>
+                            <p>测试信息管理</p>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <!-- /.sidebar-menu -->
+        </div>
+        <!-- /.sidebar -->
+    </aside>
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <div class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1 class="m-0 text-dark">信息管理页</h1>
+                    </div><!-- /.col -->
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="adminStudent.html">主页</a></li>
+                            <li class="breadcrumb-item active">测试信息管理页</li>
+                        </ol>
+                    </div><!-- /.col -->
+                </div><!-- /.row -->
+            </div><!-- /.container-fluid -->
+        </div>
+
+        <!-- Main content -->
+        <div class="content">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="grid-btn">
+                                <button class="btn btn-info" onclick="testCheck()">
+                                    <i class="fa fa-check-circle">审核</i>
+                                </button>
+                                <button class="btn btn-danger" onclick="testDelete()"><i
+                                        class="fa fa-trash">删除</i>
+                                </button>
+                            </div>
+                            <!-- 数据展示列表，id 为 jqGrid -->
+                            <table id="jqGrid" class="table table-bordered">
+                            </table>
+                            <!-- 分页按钮展示区 -->
+                            <div id="jqGridPager" ></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="content">
+        <!-- 模态框（Modal） -->
+        <div class="modal fade" id="testCheck" tabindex="-1" role="dialog" aria-labelledby="modalAddLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+<!--                        <h6 class="modal-title" id="modalAddTitle">用户添加</h6>-->
+                    </div>
+                    <form>
+                        <div class="modal-body">
+                            <input type="hidden" id="testId" value="0">
+                            <div class="form-group">
+                                <div class="btn-group btn-group-toggle" data-toggle="buttons" style="width: 100%">
+                                    <label class="btn btn-secondary" style="width: 50%" id="opt1">
+                                        <input type="radio" name="testCheck" id="option1" value="通过" autocomplete="off"  > 通过
+                                    </label>
+                                    <label class="btn btn-secondary" style="width: 50%" id="opt2">
+                                        <input type="radio" name="testCheck" id="option2" value="不通过" autocomplete="off" > 不通过
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                        <button type="button" class="btn btn-primary" id="checkButton">确认</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.modal -->
+    </div>
+
+    <!-- /.content-wrapper -->
+    <footer class="main-footer">
+        <strong>Copyright &copy; 2020 By LSC.</strong>
+        All rights reserved.
+        <div class="float-right d-none d-sm-inline-block">
+            <b>Version</b> 1.0
+        </div>
+    </footer>
+
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark">
+        <!-- Control sidebar content goes here -->
+    </aside>
+    <!-- /.control-sidebar -->
+    </div>
+</div>
+<!-- ./wrapper -->
+
+<!-- jQuery -->
+<script src="../../static/plugins/jquery/jquery.min.js"></script>
+<!-- jQuery UI 1.11.4 -->
+<script src="../../static/plugins/jQueryUI/jquery-ui.min.js"></script>
+<!-- Bootstrap 4 -->
+<script src="../../static/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="../../static/plugins/jqgrid-5.3.0/grid.locale-cn.js"></script>
+<script src="../../static/plugins/jqgrid-5.3.0/jquery.jqGrid.min.js"></script>
+<script type="text/javascript" src="../../static/dist/js/public.js"></script>
+<script src="../../static/dist/js/adminlte.js"></script>
+<!--sweet alert-->
+<script src="../../static/plugins/sweetalert/sweetalert.min.js"></script>
+<script type="text/javascript">
+
+    function load_name(){
+        // 获取左上角登录的用户名
+        var userName=localStorage.getItem("userName");
+        if(userName==null||userName==""){
+            $("#adminName").html('');
+        }else{
+            $("#adminName").html(userName);
+        }
+    }
+
+    $(function () {
+        //隐藏错误提示框
+        $('.alert-danger').css("display", "none");
+
+        $("#jqGrid").jqGrid({
+            url: '../tests/list',
+            datatype: "json",
+            colModel: [
+                 {label: 'id', name: 'id', index: 'id', width: 50, hidden: true, key: true},
+                 {label: '问题', name: 'testName', index: 'testName', sortable: false, width: 1},
+                 {label: '选项A', name: 'optionA', index: 'optionA', sortable: false, width: 1},
+                 {label: '选项B', name: 'optionB', index: 'optionB', sortable: false, width: 1},
+                 {label: '选项C', name: 'optionC', index: 'optionC', sortable: false, width: 1},
+                 {label: '选项D', name: 'optionD', index: 'optionD', sortable: false, width: 1},
+                 {label: '正确选项', name: 'answer', index: 'answer', sortable: false, width: 1},
+                 {label: '分值', name: 'score', index: 'score', sortable: false, width: 1},
+                 {label: '所属课程', name: 'courseName', index: 'courseName', sortable: false, width: 1},
+                 {label: '审核状态', name: 'isChecked', index: 'isChecked', sortable: false, width: 1}
+            ],
+            height: 485,
+            rowNum: 10,
+            rowList: [10, 30, 50],
+            styleUI: 'Bootstrap',
+            loadtext: '信息读取中...',
+            rownumbers: true,
+            rownumWidth: 35,
+            autowidth: true,
+            multiselect: true,
+            pager: "#jqGridPager",
+            jsonReader: {
+                root: "data.list",
+                page: "data.currPage",
+                total: "data.totalPage",
+                records: "data.totalCount"
+            },
+            prmNames: {
+                page: "page",
+                rows: "limit",
+                order: "order"
+            },
+            gridComplete: function () {
+                //隐藏grid底部滚动条
+                $("#jqGrid").closest(".ui-jqgrid-bdiv").css({"overflow-x": "hidden"});
+            }
+        });
+
+        $(window).resize(function () {
+            $("#jqGrid").setGridWidth($(".card-body").width());
+        });
+    });
+
+    function testCheck() {
+        reset();
+        //获取到当前需要修改的记录的主键
+        var grid = $("#jqGrid");
+        var rowKey = grid.getGridParam("selrow");
+        if (!rowKey) {
+            swal("请选择一条记录",{
+                icon:"warning",
+            });
+            return;
+        }
+        var selectIDs = grid.getGridParam("selarrrow");
+        if (selectIDs.length > 1) {
+            swal("只能选择一条记录",{
+                icon:"warning",
+            });
+            return;
+        }
+        var testId = selectIDs[0];
+        $("#testId").val(testId);
+        //modal框给显示出来
+        $("#testCheck").modal('show');
+    }
+
+
+    $('#checkButton').click(function () {
+        var testId = $('#testId').val();
+        var isChecked = $("input[type='radio']:checked").val();
+        var data = {"id": testId, "isChecked": isChecked};
+        $.ajax({
+            type: 'POST',//方法类型
+            dataType: "json",//预期服务器返回的数据类型
+            url: '../tests/checked',//url
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify(data),
+            success: function (result) {
+                if (result.resultCode == 200) {
+                    swal("审核成功",{
+                        icon:"success",
+                    });
+                    $('#testCheck').modal('hide');
+                    reload();
+                }
+                else {
+                    swal(result.message,{
+                        icon:"error",
+                    });
+                }
+                ;
+            },
+            error: function () {
+                swal("操作失败",{
+                    icon:"error",
+                });
+            }
+        });
+    })
+
+
+
+    function testDelete() {
+        //首先获取选中的id
+        var grid = $("#jqGrid");
+        var rowKey = grid.getGridParam("selrow");
+        if (!rowKey) {
+            swal("请选择一条记录",{
+                icon:"warning",
+            });
+            return;
+        }
+        var selectIDs = grid.getGridParam("selarrrow");
+        //发送删除请求
+
+        $.ajax({
+            type:"DELETE",
+            url: "../tests/delete",
+            contentType: "application/json",
+            data: JSON.stringify(selectIDs),
+            success: function (r) {
+                if (r.resultCode == 200) {
+                    swal("删除成功",{
+                        icon:"success",
+                    });
+                    //成功之后刷新列表
+                    $("#jqGrid").trigger("reloadGrid");
+                } else {
+                    swal(r.message,{
+                        icon:"error",
+                    });
+                }
+            }
+        });
+    }
+    function logout() {
+            delCookie("token");
+        localStorage.removeItem("userName");
+            window.location.href = "/index.html";
+        }
+    /**
+     * 重置 使得上一次输入的内容在重新打开输入框时被清除
+     **/
+    function reset() {
+
+        $('#opt1').removeClass("active");
+        $('#opt2').removeClass("active");
+    }
+
+    /**
+     * 添加之后刷新列表
+     */
+    function reload() {
+        var page = $("#jqGrid").jqGrid('getGridParam', 'page');
+        $("#jqGrid").jqGrid('setGridParam', {
+            page: page
+        }).trigger("reloadGrid");
+    }
+</script>
+</body>
+</html>

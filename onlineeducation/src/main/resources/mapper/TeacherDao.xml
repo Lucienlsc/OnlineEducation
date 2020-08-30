@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.onlineeducation.onlineeducation.dao.TeacherDao">
+    <resultMap type="com.onlineeducation.onlineeducation.entity.Teacher" id="TeacherResult">
+        <id property="id" column="tid" jdbcType="BIGINT"/>
+        <result property="teacherName" column="tname" jdbcType="VARCHAR"/>
+        <result property="teacherPassword" column="tpassword" jdbcType="VARCHAR"/>
+        <result property="teacherSex" column="tsex" jdbcType="VARCHAR"/>
+        <result property="teacherToken" column="ttoken" jdbcType="VARCHAR"/>
+        <result property="teaJobNumber" column="tJobNumber" jdbcType="VARCHAR"/>
+        <result property="isDeleted" column="is_deleted" jdbcType="TINYINT"/>
+        <!--property是entity里面的字符名，column是数据库里的字段名-->
+    </resultMap>
+
+    <select id="getTeacherUserByTeacherJobNumAndPassword" resultMap="TeacherResult">
+        select tid,tname from teacher where tJobNumber = #{teaJobNumber} and tpassword = #{teacherPassword} limit 1
+    </select>
+
+    <update id="updateTeacherUserToken">
+        update teacher set ttoken = #{newToken} where tid =#{userId}
+    </update>
+
+    <select id="findTeacherUsers" parameterType="Map" resultMap="TeacherResult">
+        select * from teacher
+        where is_deleted=0
+        order by tid desc
+        <if test="start!=null and limit!=null">
+            limit #{start},#{limit}
+        </if>
+    </select>
+
+    <select id="getTotalTeacherUser" parameterType="Map" resultType="int">
+        select count(*) from teacher
+        where is_deleted=0
+    </select>
+
+    <select id="getTeacherUserByUserName" resultMap="TeacherResult">
+        select tid,tname,ttoken
+        from teacher
+        where tname = #{userName}
+        and is_deleted = 0
+        ORDER BY tid DESC limit 1
+    </select>
+
+    <insert id="addTeacherUser" parameterType="com.onlineeducation.onlineeducation.entity.Teacher">
+        insert into teacher(tname,tpassword,tJobNumber,tsex)
+        value (#{teacherName},#{teacherPassword},#{teaJobNumber},#{teacherSex})
+    </insert>
+
+    <update id="updateTeacherPassword">
+        update teacher set tpassword = #{newPassword} ,ttoken = '' where tid =#{userId} and is_deleted = 0
+    </update>
+
+    <update id="deleteTeacherBatch">
+        update teacher
+        set is_deleted=1 where tid in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
+    <select id="getTeacherUserById" resultMap="TeacherResult">
+        select tname,ttoken
+        from teacher
+        where tid = #{id}
+        and is_deleted = 0
+        ORDER BY tid DESC limit 1
+    </select>
+
+    <select id="getTeacherUserByToken" resultMap="TeacherResult">
+		select tid,tname,ttoken
+		from teacher
+        where ttoken = #{userToken}
+		ORDER BY tid DESC limit 1
+	</select>
+
+    <select id="getTeacherUserByJobNumber" resultMap="TeacherResult">
+		select tname
+		from teacher
+        where tJobNumber = #{JobNumber}
+		ORDER BY tid DESC limit 1
+	</select>
+</mapper>

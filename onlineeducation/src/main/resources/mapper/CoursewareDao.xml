@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.onlineeducation.onlineeducation.dao.CoursewareDao">
+    <resultMap type="com.onlineeducation.onlineeducation.entity.Courseware" id="CoursewareResult">
+        <result property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="coursewareURL" column="coursewareURL"/>
+        <result property="uploadTime" column="uploadTime" jdbcType="TIMESTAMP"/>
+        <result property="teacher_ID" column="teacher_ID"/>
+        <result property="isDeleted" column="is_deleted"/>
+        <result property="isChecked" column="is_checked"/>
+        <result property="courseName" column="courseName"/>
+
+        <association property="teacher" column="tid" javaType="com.onlineeducation.onlineeducation.entity.Teacher">
+            <id property="id" column="tid"/>
+            <result property="teacherName" column="tname"/>
+            <result property="isDeleted" column="is_deleted" jdbcType="TINYINT"/>
+        </association>
+
+        <association property="course" column="cid" javaType="com.onlineeducation.onlineeducation.entity.Course">
+            <id property="id" column="cid"/>
+            <result property="courseName" column="courseName"/>
+            <result property="isDeleted" column="is_deleted" jdbcType="TINYINT"/>
+        </association>
+    </resultMap>
+
+
+    <select id="findCoursewareInTeacher" parameterType="Map" resultMap="CoursewareResult">
+        select * from courseware c, teacher t, course cc
+        where c.is_deleted=0 and t.is_deleted=0 and c.teacher_ID = t.tid and c.courseName = cc.cname
+        and cc.is_deleted=0 and c.teacher_ID=#{teacherID}
+        order by c.id desc
+        <if test="start!=null and limit!=null">
+            limit #{start},#{limit}
+        </if>
+    </select>
+
+    <select id="getTotalCoursewareInTeacher" parameterType="Map" resultType="int">
+        select count(*) from courseware
+        where is_deleted=0 and teacher_ID=#{teacher_ID}
+    </select>
+
+    <select id="findCoursewareInAdmin" parameterType="Map" resultMap="CoursewareResult">
+        select * from courseware c, teacher t, course cc
+        where c.is_deleted=0 and t.is_deleted=0 and c.teacher_ID = t.tid and c.courseName = cc.cname and cc.is_deleted=0
+        order by c.id desc
+        <if test="start!=null and limit!=null">
+            limit #{start},#{limit}
+        </if>
+    </select>
+
+    <select id="getTotalCoursewareInAdmin" parameterType="Map" resultType="int">
+        select count(*) from courseware
+        where is_deleted=0
+    </select>
+
+    <insert id="addCourseware" parameterType="com.onlineeducation.onlineeducation.entity.Courseware">
+        insert into courseware(title,coursewareURL,teacher_ID,courseName)
+        values(#{title},#{coursewareURL},#{teacher_ID},#{courseName})
+    </insert>
+
+    <select id="findCoursewareByCourseName" parameterType="Map" resultMap="CoursewareResult">
+        select *
+        from courseware where courseName=#{courseName} and is_deleted=0 and is_checked='通过'
+    </select>
+
+    <update id="updateCourseware" parameterType="com.onlineeducation.onlineeducation.entity.Courseware">
+        update courseware
+        set
+        coursewareURL=#{coursewareURL},title=#{title},courseName=#{courseName}
+        where id=#{id} and is_deleted=0
+    </update>
+
+    <update id="checkCourseware">
+        update courseware
+        set is_checked = #{isChecked} where id = #{coursewareId} and is_deleted = 0
+    </update>
+
+    <select id="findCoursewareById" parameterType="int" resultMap="CoursewareResult">
+        select id,title,teacher_ID,uploadTime,courseName,coursewareURL
+        from courseware where id=#{id} and is_deleted=0
+    </select>
+
+    <update id="deleteCoursewareBatch">
+        update courseware
+        set is_deleted=1 where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+</mapper>

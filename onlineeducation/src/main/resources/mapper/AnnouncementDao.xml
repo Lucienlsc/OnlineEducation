@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.onlineeducation.onlineeducation.dao.AnnouncementDao">
+    <resultMap type="com.onlineeducation.onlineeducation.entity.Announcement" id="AnnouncementResult">
+        <id property="id" column="id" />
+        <result property="title" column="title" />
+        <result property="content" column="content" />
+        <result property="releaseTime" column="releaseTime" jdbcType="TIMESTAMP"/>
+        <result property="isDeleted" column="is_deleted" jdbcType="TINYINT"/>
+        <result property="adminID" column="adminID"/>
+        <!--property是entity里面的字符名，column是数据库里的字段名-->
+
+        <association property="admin" column="adminID" javaType="com.onlineeducation.onlineeducation.entity.Admin">
+            <id property="id" column="tid"/>
+            <result property="adminName" column="aname"/>
+        </association>
+    </resultMap>
+
+    <select id="findAnnouncement" parameterType="Map" resultMap="AnnouncementResult">
+        select * from announcement a, admin ad
+        where a.is_deleted=0 and a.adminID = ad.aid
+        order by a.id desc
+        <if test="start!=null and limit!=null">
+            limit #{start},#{limit}
+        </if>
+    </select>
+
+    <insert id="addAnnouncement" parameterType="com.onlineeducation.onlineeducation.entity.Announcement">
+        insert into announcement(title,content,adminID)
+        value (#{title},#{content},#{adminID})
+    </insert>
+
+    <select id="getAnnouncementByAnnouncementTitle" resultMap="AnnouncementResult">
+        select id,title
+        from announcement
+        where title = #{title}
+        and is_deleted = 0
+        ORDER BY id DESC limit 1
+    </select>
+
+    <update id="updateAnnouncement">
+        update announcement set title = #{newTitle} ,content = #{newContent}, adminID = #{adminID} where id =#{announcementId} and is_deleted = 0
+    </update>
+
+    <select id="getTotalAnnouncementNumber" parameterType="Map" resultType="int">
+        select count(*) from announcement
+        where is_deleted=0
+    </select>
+
+    <select id="gettAnnouncementById" resultMap="AnnouncementResult">
+        select id,title,content
+        from announcement
+        where id = #{id}
+        and is_deleted = 0
+        ORDER BY id DESC limit 1
+    </select>
+
+    <update id="deletetAnnouncementBatch">
+        update announcement
+        set is_deleted=1 where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+</mapper>

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.onlineeducation.onlineeducation.dao.VideoDao">
+    <resultMap type="com.onlineeducation.onlineeducation.entity.Video" id="VideoResult">
+        <result property="id" column="vid"/>
+        <result property="videoName" column="vname"/>
+        <result property="teacherID" column="teacherID"/>
+        <result property="uploadTime" column="uploadTime" jdbcType="TIMESTAMP"/>
+        <result property="videoURL" column="videoURL"/>
+        <result property="isDeleted" column="is_deleted"/>
+        <result property="isChecked" column="is_checked"/>
+        <result property="courseName" column="courseName"/>
+
+        <association property="teacher" column="tid" javaType="com.onlineeducation.onlineeducation.entity.Teacher">
+            <id property="id" column="tid"/>
+            <result property="teacherName" column="tname"/>
+            <result property="isDeleted" column="is_deleted" jdbcType="TINYINT"/>
+        </association>
+
+        <association property="course" column="courseID" javaType="com.onlineeducation.onlineeducation.entity.Course">
+            <id property="id" column="cid"/>
+            <result property="courseName" column="cname"/>
+            <result property="isDeleted" column="is_deleted" jdbcType="TINYINT"/>
+        </association>
+    </resultMap>
+
+    <select id="findVideoInTeacher" parameterType="Map" resultMap="VideoResult">
+        select * from video v, teacher t, course c
+        where v.teacherID = t.tid and v.courseName = c.cname and v.is_deleted = 0 and c.is_deleted = 0
+        and t.is_deleted = 0 and v.teacherID=#{teacherID}
+        order by vid desc
+        <if test="start!=null and limit!=null">
+            limit #{start},#{limit}
+        </if>
+    </select>
+
+    <select id="getTotalVideoInTeacher" parameterType="Map" resultType="int">
+        select count(*) from video
+        where is_deleted=0 and teacherID=#{teacherID}
+    </select>
+
+    <select id="findVideoInAdmin" parameterType="Map" resultMap="VideoResult">
+        select * from video v, teacher t, course c
+        where v.teacherID = t.tid and v.courseName = c.cname and v.is_deleted = 0 and c.is_deleted = 0
+        and t.is_deleted = 0
+        order by vid desc
+        <if test="start!=null and limit!=null">
+            limit #{start},#{limit}
+        </if>
+    </select>
+
+    <select id="getTotalVideoInAdmin" parameterType="Map" resultType="int">
+        select count(*) from video
+        where is_deleted=0
+    </select>
+
+    <select id="findVideoByCourseName" parameterType="Map" resultMap="VideoResult">
+        select *
+        from video where courseName=#{courseName} and is_deleted=0 and is_checked='通过'
+    </select>
+
+    <insert id="addVideo" parameterType="com.onlineeducation.onlineeducation.entity.Video">
+        insert into video(vname,teacherID,videoURL,courseName)
+        value (#{videoName},#{teacherID},#{videoURL},#{courseName})
+    </insert>
+
+    <update id="checkVideo" >
+        update video
+        set is_checked = #{isChecked} where vid = #{videoId} and is_deleted = 0
+    </update>
+
+    <select id="findVideoById" parameterType="int" resultMap="VideoResult">
+        select vid,vname,teacherID,uploadTime,courseName,videoURL
+        from video where vid=#{id} and is_deleted=0  limit 1
+    </select>
+
+    <update id="deleteVideoBatch">
+        update video
+        set is_deleted=1 where vid in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
+    <update id="updateVideo" parameterType="com.onlineeducation.onlineeducation.entity.Video">
+        update video
+        set
+        videoURL=#{videoURL},vname=#{videoName},courseName=#{courseName}
+        where vid=#{id} and is_deleted=0
+    </update>
+
+</mapper>

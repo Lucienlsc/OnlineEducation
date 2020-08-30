@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.onlineeducation.onlineeducation.dao.MessageDao">
+    <resultMap type="com.onlineeducation.onlineeducation.entity.Message" id="MessageResult">
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <!-- 主键使用id标签配置映射关系-->
+        <result property="content" column="content" />
+        <result property="releaseTime" column="releaseTime" jdbcType="TIMESTAMP"/>
+        <result property="userName" column="userName" />
+        <result property="courseID" column="course_id" jdbcType="BIGINT"/>
+        <result property="isDeleted" column="is_deleted" jdbcType="TINYINT"/>
+        <result property="parentID" column="parent_id" jdbcType="BIGINT"/>
+        <!--property是entity里面的字符名，column是数据库里的字段名-->
+
+        <association property="course" column="course_id" javaType="com.onlineeducation.onlineeducation.entity.Course">
+            <id property="id" column="cid"/>
+            <result property="courseName" column="cname"/>
+            <result property="isDeleted" column="is_deleted" jdbcType="TINYINT"/>
+        </association>
+
+    </resultMap>
+
+    <select id="findMessageInTeacher" parameterType="Map" resultMap="MessageResult">
+        select * from message m, course c
+        where m.is_deleted=0 and m.course_id = c.cid and c.is_deleted=0 and c.tid=#{teacherID}
+        order by m.id asc
+        <if test="start!=null and limit!=null">
+            limit #{start},#{limit}
+        </if>
+    </select>
+
+    <select id="getTotalMessageNumberInTeacher" parameterType="Map" resultType="int">
+        select count(*) from message m,course c
+        where m.is_deleted=0 and c.tid=#{teacherID} and c.is_deleted=0
+    </select>
+
+    <select id="findMessageInAdmin" parameterType="Map" resultMap="MessageResult">
+        select * from message m, course c
+        where m.is_deleted=0 and m.course_id = c.cid
+        order by m.id asc
+        <if test="start!=null and limit!=null">
+            limit #{start},#{limit}
+        </if>
+    </select>
+
+    <select id="getTotalMessageNumberInAdmin" parameterType="Map" resultType="int">
+        select count(*) from message
+        where is_deleted=0
+    </select>
+
+    <insert id="replyMessage" parameterType="com.onlineeducation.onlineeducation.entity.Message">
+        insert into message(content,parent_id,course_id,userName)
+        value (#{content},#{parentID},#{courseID},#{userName})
+    </insert>
+
+    <select id="gettMessageById" parameterType="int" resultMap="MessageResult">
+        select m.id,c.cid
+        from message m,course c where m.id=#{id} and m.is_deleted=0 and c.is_deleted=0 and m.course_id=c.cid
+
+    </select>
+
+    <select id="getMessageByCourseID" parameterType="Map" resultMap="MessageResult">
+        select *
+        from message m, course c where m.course_id=#{courseID} and m.is_deleted = 0 and c.is_deleted = 0 and m.course_id = c.cid
+    </select>
+
+
+    <update id="deletetMessageBatch">
+        update message
+        set is_deleted=1 where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+</mapper>

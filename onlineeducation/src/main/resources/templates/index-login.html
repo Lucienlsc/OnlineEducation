@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- The above 4 meta tags *Must* come first in the head; any other head content must come *after* these tags -->
+
+    <!-- Title -->
+    <title>Clever - Education &amp; Courses Template | Home</title>
+
+    <!-- Favicon -->
+    <link rel="icon" href="dist/img/core-img/favicon.ico">
+
+    <!-- Theme style -->
+    <link rel="stylesheet" href="dist/css/adminlte.min.css">
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="dist/css/style.css">
+
+</head>
+
+<body onload="load_name()">
+    <!-- Preloader -->
+    <div id="preloader">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- ##### Header Area Start ##### -->
+    <header class="header-area">
+
+        <!-- Navbar Area -->
+        <div class="clever-main-menu">
+            <div class="classy-nav-container breakpoint-off">
+                <!-- Menu -->
+                <nav class="classy-navbar justify-content-between" id="cleverNav">
+
+                    <!-- Logo -->
+                    <a class="nav-brand" href="index.html"><img src="dist/img/logo.png" alt=""></a>
+
+                    <!-- Navbar Toggler -->
+                    <div class="classy-navbar-toggler">
+                        <span class="navbarToggler"><span></span><span></span><span></span></span>
+                    </div>
+
+                    <!-- Menu -->
+                    <div class="classy-menu">
+
+                        <!-- Close Button -->
+                        <div class="classycloseIcon">
+                            <div class="cross-wrap"><span class="top"></span><span class="bottom"></span></div>
+                        </div>
+
+                        <!-- Nav Start -->
+                        <div class="classynav">
+
+
+                            <!-- Search Button -->
+                            <!-- <div class="search-area">
+                                <form action="#" method="post">
+                                    <input type="search" name="search" id="search" placeholder="Search">
+                                    <button type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
+                                </form>
+                            </div> -->
+
+                            <!-- 注册 / 登录 -->
+                            <div class="login-state d-flex align-items-center">
+                                <div class="user-name mr-30">
+                                    <div class="dropdown">
+                                        <a class="dropdown-toggle" href="#" role="button" id="userName" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">学生姓名</a>
+                                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userName">
+                                            <a class="dropdown-item"  onclick="udpPassword()" style="cursor: pointer">修改密码</a>
+                                            <a class="dropdown-item" href="#" onclick="logout()" >退出登录</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Nav End -->
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </header>
+    <!-- ##### Header Area End ##### -->
+
+    <div class="content">
+        <!-- 模态框（Modal） -->
+        <div class="modal fade" id="modalPassword" tabindex="-1" role="dialog" aria-labelledby="modalEditLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <input type="hidden" id="userId" value="0">
+                            <div class="form-group">
+                                <label for="passwordEdit" class="control-label">新密码:</label>
+                                <input type="text" class="form-control" id="passwordEdit">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                        <button type="button" class="btn btn-primary" id="editButton">确认</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+        <!-- /.modal -->
+
+    <!-- ##### Hero Area Start ##### -->
+    <section class="hero-area bg-img bg-overlay-2by5" style="background-image: url(dist/img/bg1.jpg);">
+        <div class="container h-100">
+            <div class="row h-100 align-items-center">
+                <div class="col-12">
+                    <!-- Hero Content -->
+                    <div class="hero-content text-center">
+                        <h2>Let's Study Together</h2>
+                        <a th:href="@{'/myCourses/'+${sid}}+'.html'" class="btn clever-btn" target="_blank">我的课程</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- ##### Hero Area End ##### -->
+
+    <!-- ##### Popular Courses Start ##### -->
+    <section class="popular-courses-area section-padding-100-0" style="background-image: url(dist/img/core-img/texture.png);">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="section-heading">
+                        <h3>课&nbsp&nbsp&nbsp程&nbsp&nbsp&nbsp列&nbsp&nbsp&nbsp表</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <!-- 课程显示 -->
+                <th:block th:each="course:${courses}">
+                <div class="col-12 col-md-6 col-lg-4" style="margin-bottom: 20px">
+                    <div class="single-popular-course mb-100 " >
+                        <div style="float: left;display:block;;box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);border-radius:0 0 6px 6px">
+                            <img src="dist/img/bg-img/c1.jpg" alt="" id="img" th:src="${course.imageURL}" style="height: 150px;width: 350px">
+                            <!-- Course Content -->
+                            <div class="course-content">
+                                <h4 id="courseName" th:text="${course.courseName}">课程名称</h4>
+                                <div class="meta d-flex align-items-center">
+                                    <span style="font-size: 14px">教师：</span>
+                                    <span style="font-size: 14px" id="teacherName" th:text="${course.teacher.teacherName}">教师姓名</span>
+                                </div>
+                                <p class="contentFlow" id="description" th:text="${course.description}">课程简介</p>
+                            </div>
+                            <!-- Seat Rating Fee -->
+                            <div class="seat-rating-fee d-flex justify-content-between">
+                                <div class="seat-rating h-100 d-flex align-items-center" style="margin-left: 20px">
+                                    <span style="font-size: 14px">发布时间：</span>
+                                    <span style="font-size: 14px" id="releaseTime" th:text="${#dates.format(course.uploadTime,'yyyy-MM-dd')}">xxxx-xx-xx</span>
+                                </div>
+                                <div class="course-fee h-100">
+                                    <a th:href="@{'/courses/detail/'+${course.id}}+'.html'" class="free" target="_blank">开始学习</a>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </th:block>
+            </div>
+        </div>
+    </section>
+
+    <!-- ##### Footer Area Start ##### -->
+    <footer class="footer-area">
+        <!-- Top Footer Area -->
+        <div class="top-footer-area">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <!-- Footer Logo -->
+                        <div class="footer-logo">
+                            <a href="#"><img th:src="@{/dist/img/logo2.png}" alt="" src="dist/img/logo2.png"></a>
+                        </div>
+                        <!-- Copywrite -->
+                        <p><a href="#"><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                            Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This Web is made by LSC
+                            <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Footer Area -->
+        <div class="bottom-footer-area d-flex justify-content-between align-items-center">
+            <!-- Contact Info -->
+            <div class="contact-info">
+                <a href="#"><span>Phone:</span> +86 18768171767</a>
+                <a href="#"><span>Email:</span> xmblsc@163.com</a>
+            </div>
+            <!-- Follow Us -->
+            <div class="follow-us">
+                <span>Follow us</span>
+                <a href="#"><i class="fa fa-qq" aria-hidden="true"></i></a>
+                <a href="#"><i class="fa fa-weixin" aria-hidden="true"></i></a>
+                <a href="#"><i class="fa fa-weibo" aria-hidden="true"></i></a>
+            </div>
+        </div>
+    </footer>
+    <!-- ##### Footer Area End ##### -->
+
+    <!-- ##### All Javascript Script ##### -->
+    <!-- jQuery-2.2.4 js -->
+    <script src="plugins/jquery/jquery.min.js"></script>
+    <!-- Popper js -->
+    <script src="plugins/popper/umd/popper.min.js"></script>
+    <!-- Bootstrap js -->
+    <script src="plugins/bootstrap/js/bootstrap.min.js"></script>
+    <!-- All Plugins js -->
+    <script src="plugins/plugins.js"></script>
+    <!--sweet alert-->
+    <script src="plugins/sweetalert/sweetalert.min.js"></script>
+
+    <script type="text/javascript" src="dist/js/public.js"></script>
+    <!-- Active js -->
+    <script src="dist/js/active.js"></script>
+    <script src="dist/js/adminlte.js"></script>
+    <script type="text/javascript">
+
+        function load_name(){
+            // 获取右上角登录的用户名
+            var userID=localStorage.getItem("userName");
+
+            $.get("students/getName/" + userID, function (r) {
+                if (r.resultCode == 200 && r.data != null) {
+                    //填充数据
+                    $('#userName').html(r.data.studentName);
+                }
+            });
+        }
+
+
+        function udpPassword() {
+            reset();
+            //获取到当前需要修改的记录的主键
+            var userId = localStorage.getItem("userName");//获取登录学生的学号
+            $("#userId").val(userId);
+            //modal框给显示出来
+            $("#modalPassword").modal('show');
+        }
+
+        $('#editButton').click(function () {
+            var userId = $('#userId').val();
+            var password = $('#passwordEdit').val();
+            var data = {"studentID": userId, "studentPassword": password};
+            $.ajax({
+                type: 'POST',//方法类型
+                dataType: "json",//预期服务器返回的数据类型
+                url: 'students/updatePassword',//url
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(data),
+                success: function (result) {
+                    if (result.resultCode == 200) {
+                        swal("修改成功",{
+                            icon:"success",
+                        });
+                        $('#modalPassword').modal('hide');
+                        reload();
+                    }
+                    else {
+                        swal(result.message,{
+                            icon:"error",
+                        });
+                    }
+                    ;
+                },
+                error: function () {
+                    swal("操作失败",{
+                        icon:"error",
+                    });
+                }
+            });
+        })
+
+        function logout() {
+            localStorage.removeItem("userName");
+            delCookie("token");
+            window.location.href = "/index.html";
+        }
+        /**
+         * 重置 使得上一次输入的内容在重新打开输入框时被清除
+         **/
+        function reset() {
+            $('#userId').val('');
+            $('#passwordEdit').val('');
+        }
+
+    </script>
+</body>
+
+</html>

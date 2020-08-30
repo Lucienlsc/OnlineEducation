@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>课程信息管理页</title>
+    <!-- jqgrid ui -->
+    <link href="../../static/plugins/jqgrid-5.3.0/ui.jqgrid-bootstrap4.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="../../static/plugins/bootstrap/css/bootstrap.css">
+    <!-- sweet alert-->
+    <link rel="stylesheet" href="../../static/plugins/sweetalert/sweetalert.css">
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="../../static/plugins/font-awesome/css/font-awesome.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="../../static/dist/css/adminlte.min.css">
+    <style>
+        .ui-jqgrid tr.jqgrow td {
+            white-space: normal !important;
+            height:auto;
+            display: table-cell;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body class="hold-transition sidebar-mini" onload="load_name()">
+<div class="wrapper">
+
+    <!-- Navbar -->
+    <nav class="main-header navbar navbar-expand bg-white navbar-light border-bottom">
+        <!-- Left navbar links -->
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" data-widget="pushmenu" href="#"><i class="fa fa-bars"></i></a>
+            </li>
+
+        </ul>
+        <!-- Right navbar links -->
+        <ul class="navbar-nav ml-auto">
+            <!-- Messages Dropdown Menu -->
+            <li class="nav-item dropdown">
+                <a class="nav-link"  href="#" onclick="logout()">
+                    <i class="fa fa-sign-out">退出登录</i>
+                </a>
+            </li>
+
+        </ul>
+    </nav>
+    <!-- /.navbar -->
+    <!-- Main Sidebar Container -->
+    <aside class="main-sidebar sidebar-dark-primary elevation-4">
+
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <!-- Sidebar user panel (optional) -->
+            <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+                <div class="info">
+                    <span class="text-white">欢迎您！</span>
+                    <br>
+                    <span class="text-white" id="teacherID"></span>
+                    <span class="text-white">,</span>
+                    <span class="text-white" id="teacherName"></span>
+                </div>
+            </div>
+
+            <!-- Sidebar Menu -->
+            <nav class="mt-2">
+                <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
+                    data-accordion="false">
+                    <!-- Add icons to the links using the .nav-icon class
+                         with font-awesome or any other icon font library -->
+
+
+                    <li class="nav-header">管理模块</li>
+                    <li class="nav-item">
+                        <a href="teacherStudent.html" class="nav-link">
+                            <i class="fa  fa-user-circle-o nav-icon"></i>
+                            <p>学生用户管理</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="teacherCourse.html" class="nav-link active">
+                            <i class="fa fa-book nav-icon"></i>
+                            <p>课程信息管理</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="teacherVideo.html" class="nav-link ">
+                            <i class="fa fa-video-camera nav-icon"></i>
+                            <p>视频信息管理</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="teacherCourseware.html" class="nav-link ">
+                            <i class="fa fa-file nav-icon"></i>
+                            <p>课件信息管理</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="teacherMessage.html" class="nav-link ">
+                            <i class="fa fa-comment nav-icon"></i>
+                            <p>评论信息管理</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="teacherTest.html" class="nav-link ">
+                            <i class="fa fa-pencil nav-icon"></i>
+                            <p>测试信息管理</p>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <!-- /.sidebar-menu -->
+        </div>
+        <!-- /.sidebar -->
+    </aside>
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <div class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1 class="m-0 text-dark">信息管理页</h1>
+                    </div><!-- /.col -->
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="teacherStudent.html">主页</a></li>
+                            <li class="breadcrumb-item active">课程信息管理页</li>
+                        </ol>
+                    </div><!-- /.col -->
+                </div><!-- /.row -->
+            </div><!-- /.container-fluid -->
+        </div>
+
+        <!-- Main content -->
+        <div class="content">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="grid-btn">
+                                <button class="btn btn-info" onclick="courseAdd()">
+                                    <i class="fa fa-check-circle">添加</i>
+                                </button>
+                                <button class="btn btn-warning" onclick="courseEdit()">
+                                    <i class="fa fa-edit">编辑</i>
+                                </button>
+                                <button class="btn btn-danger" onclick="courseDelete()"><i
+                                        class="fa fa-trash">删除</i>
+                                </button>
+                            </div>
+                            <!-- 数据展示列表，id 为 jqGrid -->
+                            <table id="jqGrid" class="table table-bordered">
+                            </table>
+                            <!-- 分页按钮展示区 -->
+                            <div id="jqGridPager" ></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="content">
+        <!-- 模态框（Modal） -->
+        <div class="modal fade" id="courseModal" tabindex="-1" role="dialog" aria-labelledby="modalEditLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="form-group">
+                                <div class="alert alert-danger add-error-info">错误信息展示栏。</div>
+                            </div>
+                            <input type="hidden" id="courseId" value="0">
+                            <div class="form-group">
+                                <label for="courseName" class="control-label">课程名称:</label>
+                                <input type="text" class="form-control" id="courseName" autocomplete="off">
+                            </div>
+                            <div class="form-group">
+                                <label for="courseDescription" class="control-label">课程简介:</label>
+                                <input type="text" class="form-control" id="courseDescription">
+                            </div>
+                            <input type="hidden" id="picturePath" value="">
+                            <div class="form-group" style="margin-bottom: 0">
+                                <label  class="control-label">封面图片:</label>
+                            </div>
+                            <div class="form-group">
+                                <div  style="float: left; height: 10px;line-height: 10px">
+                                    <a class="btn btn-primary" id="upload" ><i
+                                            class="fa fa-picture-o"></i>&nbsp;上传文件</a>
+                                </div>
+                                <div class="form-group" style="display: inline-block;float: left">
+                                    <div class="col-sm-10">
+                                        <img id="img" src="../../static/dist/img/logo.png" style="width: 210px;height: 90px; display: block">
+                                    </div>
+                                </div>
+                                <br>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                        <button type="button" class="btn btn-primary" id="saveButton">确认</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.modal -->
+
+    <!-- /.content-wrapper -->
+    <footer class="main-footer">
+        <strong>Copyright &copy; 2020 By LSC.</strong>
+        All rights reserved.
+        <div class="float-right d-none d-sm-inline-block">
+            <b>Version</b> 1.0
+        </div>
+    </footer>
+
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark">
+        <!-- Control sidebar content goes here -->
+    </aside>
+    <!-- /.control-sidebar -->
+    </div>
+</div>
+<!-- ./wrapper -->
+
+<!-- jQuery -->
+<script src="../../static/plugins/jquery/jquery.min.js"></script>
+<!-- jQuery UI 1.11.4 -->
+<script src="../../static/plugins/jQueryUI/jquery-ui.min.js"></script>
+<!-- Bootstrap 4 -->
+<script src="../../static/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="../../static/plugins/jqgrid-5.3.0/grid.locale-cn.js"></script>
+<script src="../../static/plugins/jqgrid-5.3.0/jquery.jqGrid.min.js"></script>
+<script src="../../static/plugins/ajaxupload/ajaxupload.js"></script>
+<script type="text/javascript" src="../../static/dist/js/public.js"></script>
+<script src="../../static/dist/js/adminlte.js"></script>
+<!--sweet alert-->
+<script src="../../static/plugins/sweetalert/sweetalert.min.js"></script>
+<script type="text/javascript">
+
+    function load_name(){
+        // 获取左上角登录的用户名
+        var userID=localStorage.getItem("userName");
+        if(userID==null||userID==""){
+            $("#teacherID").html('');
+        }else{
+            $("#teacherID").html(userID);
+        }
+
+        $.get("../teachers/getName/" + userID, function (r) {
+            if (r.resultCode == 200 && r.data != null) {
+                //填充数据
+                $('#teacherName').html(r.data.teacherName);
+
+            }
+        });
+    }
+
+    $(function () {
+        //隐藏错误提示框
+        $('.alert-danger').css("display", "none");
+
+
+        $("#jqGrid").jqGrid({
+            url: '../courses/list',
+            loadBeforeSend: function (request) {
+                //设置header值
+                request.setRequestHeader("token", getCookie("token"));
+            },
+            datatype: "json",
+            colModel: [
+                 {label: 'id', name: 'id', index: 'id', width: 50, hidden: true, key: true},
+                 {label: '课程名称', name: 'courseName', index: 'courseName', sortable: false, width: 1},
+                 {label: '发布教师姓名', name: 'teacher.teacherName', index: 'teacher.teacherName', sortable: false, width: 1},
+                 {label: '封面图片', name: 'imageURL', index: 'imageURL', sortable: false, width: 1, formatter: imgFormatter},
+                 {label: '课程描述', name: 'description', index: 'description', sortable: false, width: 1},
+                 {label: '发布时间', name: 'uploadTime', index: 'uploadTime', sortable: false, width: 1},
+                 {label: '审核状态', name: 'isChecked', index: 'isChecked', sortable: false, width: 1},
+            ],
+            height: 485,
+            rowNum: 10,
+            rowList: [10, 30, 50],
+            styleUI: 'Bootstrap',
+            loadtext: '信息读取中...',
+            rownumbers: true,
+            rownumWidth: 35,
+            autowidth: true,
+            multiselect: true,
+            pager: "#jqGridPager",
+            jsonReader: {
+                root: "data.list",
+                page: "data.currPage",
+                total: "data.totalPage",
+                records: "data.totalCount"
+            },
+            prmNames: {
+                page: "page",
+                rows: "limit",
+                order: "order"
+            },
+            gridComplete: function () {
+                //隐藏grid底部滚动条
+                $("#jqGrid").closest(".ui-jqgrid-bdiv").css({"overflow-x": "hidden"});
+            }
+        });
+
+        $(window).resize(function () {
+            $("#jqGrid").setGridWidth($(".card-body").width());
+        });
+
+        new AjaxUpload('#upload', {
+            action: '../upload',
+            name: 'file',
+            autoSubmit: true,
+            responseType: "json",
+            onSubmit: function (file, extension) {
+                if (!(extension && /^(jpg|jpeg|png)$/.test(extension.toLowerCase()))) {
+                    swal("只支持jpg、png格式的文件！",{
+                        icon:"warning",
+                    });
+                    return false;
+                }
+            },
+            onComplete: function (file, r) {
+                if (r.resultCode == 200) {
+                    $("#picturePath").val(r.data);
+                    $("#img").attr("src", r.data);
+                    $("#img").attr("style", "width: 210px;height: 90px;display:block;");
+                    return false;
+                } else {
+                    swal(r.message,{
+                        icon:"error",
+                    });
+                }
+            }
+        });
+    });
+
+    function imgFormatter(cellvalue) {
+        return "<a href='" + cellvalue + "'> <img src='" + cellvalue + "' height=\"60\" width=\"140\" alt='error'/></a>";
+    }
+
+    function courseAdd() {
+        reset();
+        $("#courseModal").modal('show');
+    }
+
+
+    $('#saveButton').click(function () {
+        var courseId = $('#courseId').val();
+        var courseName = $('#courseName').val();
+        var courseDescription = $('#courseDescription').val();
+        var picturePath = $("#picturePath").val();
+        var data = {"courseName": courseName, "description": courseDescription,"imageURL":picturePath};
+        var url = '../courses/save'
+        if(courseId > 0)
+        {
+            //编辑操作
+            var data = {"id": courseId,"courseName": courseName, "description": courseDescription,"imageURL":picturePath};
+            var url = '../courses/update';
+        }
+        $.ajax({
+            type: 'POST',//方法类型
+            dataType: "json",//预期服务器返回的数据类型
+            url: url,//url
+            contentType: "application/json; charset=utf-8",
+            beforeSend: function (request) {
+                //设置header值
+                request.setRequestHeader("token", getCookie("token"));
+            },
+            data: JSON.stringify(data),
+            success: function (result) {
+                if (result.resultCode == 200) {
+                    swal("保存成功",{
+                        icon:"success",
+                    });
+                    $('#courseModal').modal('hide');
+                    reload();//刷新表格
+                }
+                else {
+                    swal(result.message,{
+                        icon:"error",
+                    });
+                }
+                ;
+            },
+            error: function () {
+                swal("操作失败",{
+                    icon:"error",
+                });
+            }
+        });
+    })
+
+    function courseEdit(){
+        //获取选中的id
+        reset();
+        //获取到当前需要修改的记录的主键
+        var grid = $("#jqGrid");
+        var rowKey = grid.getGridParam("selrow");
+        if (!rowKey) {
+            swal("请选择一条记录",{
+                icon:"warning",
+            });
+            return;
+        }
+        var selectIDs = grid.getGridParam("selarrrow");
+        if (selectIDs.length > 1) {
+            swal("只能选择一条记录",{
+                icon:"warning",
+            });
+            return;
+        }
+        var courseId = selectIDs[0];
+        $("#courseId").val(courseId);
+        //请求详情接口
+        $.get("../courses/info/" + courseId, function (r) {
+            if (r.resultCode == 200 && r.data != null) {
+                //数据回显
+                //填充数据至modal
+                $('#courseId').val(r.data.id);
+                $('#picturePath').val(r.data.imageURL);
+                $('#courseName').val(r.data.courseName);
+                $('#courseDescription').val(r.data.description);
+                $("#img").attr("src", r.data.imageURL);
+                $("#img").attr("style", "width: 210px;height: 90px;display:block;");
+            }
+        });
+        //弹出模态框
+        $('#courseModal').modal('show');
+    }
+
+    function courseDelete() {
+        //首先获取选中的id
+        var grid = $("#jqGrid");
+        var rowKey = grid.getGridParam("selrow");
+        if (!rowKey) {
+            swal("请选择一条记录",{
+                icon:"warning",
+            });
+            return;
+        }
+        var selectIDs = grid.getGridParam("selarrrow");
+        //发送删除请求
+
+        $.ajax({
+            type:"DELETE",
+            url: "../courses/delete",
+            contentType: "application/json",
+            data: JSON.stringify(selectIDs),
+            success: function (r) {
+                if (r.resultCode == 200) {
+                    swal("删除成功",{
+                        icon:"success",
+                    });
+                    //成功之后刷新列表
+                    $("#jqGrid").trigger("reloadGrid");
+                } else {
+                    swal(r.message,{
+                        icon:"error",
+                    });
+                }
+            }
+        });
+    }
+
+    function logout() {
+            delCookie("token");
+            localStorage.removeItem("userName");
+            window.location.href = "/index.html";
+        }
+    /**
+     * 重置 使得上一次输入的内容在重新打开输入框时被清除
+     **/
+    function reset() {
+        $("#img").attr("style", "display:none;");
+        $("#courseId").val('');
+        $("#courseName").val('');
+        $("#courseDescription").val('');
+
+    }
+
+    /**
+     * 添加之后刷新列表
+     */
+    function reload() {
+        var page = $("#jqGrid").jqGrid('getGridParam', 'page');
+        $("#jqGrid").jqGrid('setGridParam', {
+            page: page
+        }).trigger("reloadGrid");
+    }
+</script>
+</body>
+</html>

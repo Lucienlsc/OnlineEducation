@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- The above 4 meta tags *Must* come first in the head; any other head content must come *after* these tags -->
+
+    <!-- Title -->
+    <title>Clever - Education &amp; Courses Template | Home</title>
+
+    <!-- Favicon -->
+    <link rel="icon" th:href="@{/dist/img/core-img/favicon.ico}" href="dist/img/core-img/favicon.ico">
+
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" th:href="@{/dist/css/style.css}" href="dist/css/style.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" th:href="@{/dist/css/adminlte.min.css}" href="dist/css/adminlte.min.css">
+</head>
+
+<body>
+    <!-- Preloader -->
+    <div id="preloader">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- ##### Header Area Start ##### -->
+    <header class="header-area">
+
+        <!-- Navbar Area -->
+        <div class="clever-main-menu">
+            <div class="classy-nav-container breakpoint-off">
+                <!-- Menu -->
+                <nav class="classy-navbar justify-content-between" id="cleverNav">
+
+                    <!-- Logo -->
+                    <a class="nav-brand" th:href="@{index.html}"><img th:src="@{/dist/img/logo.png}" alt=""></a>
+
+                    <!-- Navbar Toggler -->
+                    <div class="classy-navbar-toggler">
+                        <span class="navbarToggler"><span></span><span></span><span></span></span>
+                    </div>
+
+                    <!-- Menu -->
+                    <div class="classy-menu">
+
+                        <!-- Close Button -->
+                        <div class="classycloseIcon">
+                            <div class="cross-wrap"><span class="top"></span><span class="bottom"></span></div>
+                        </div>
+
+                        <!-- Nav Start -->
+                        <div class="classynav">
+
+                            <!-- 注册 / 登录 -->
+                            <div class="register-login-area">
+                                <a href="#" class="btn" onclick="registered()">注册</a>
+                                <a th:href="@{login.html}" class="btn active">登录</a>
+                            </div>
+
+                        </div>
+                        <!-- Nav End -->
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </header>
+    <!-- ##### Header Area End ##### -->
+
+    <div class="content">
+        <!-- 模态框（Modal） -->
+        <div class="modal fade" id="modalRegister" tabindex="-1" role="dialog" aria-labelledby="modalRegisterabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                        <!--                        <h6 class="modal-title" id="modalAddTitle">用户添加</h6>-->
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="form-group">
+                                <div class="alert alert-danger add-error-info">错误信息展示栏。</div>
+                            </div>
+                            <div class="form-group">
+                                <label for="userNameNew" class="control-label">姓名:</label>
+                                <input type="text" class="form-control" id="userNameNew" autocomplete="off">
+                            </div>
+                            <div class="form-group">
+                                <label for="passwordNew" class="control-label">密码:</label>
+                                <input type="password" class="form-control" id="passwordNew">
+                            </div>
+                            <div class="form-group">
+                                <label for="studentIDNew" class="control-label">学号:</label>
+                                <input type="text" class="form-control" id="studentIDNew">
+                            </div>
+                            <div class="form-group">
+                                <label  class="control-label">性别:</label>
+                                <div class="btn-group btn-group-toggle" data-toggle="buttons" style="width: 100%">
+                                    <label class="btn btn-secondary" id="sex1" style="width: 50%;">
+                                        <input type="radio" name="userSex" id="option1New" value="男" autocomplete="off" checked="" > 男
+                                    </label>
+                                    <label class="btn btn-secondary" id="sex2" style="width: 50%">
+                                        <input type="radio" name="userSex" id="option2New" value="女" autocomplete="off" > 女
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="studentClassNew" class="control-label">班级:</label>
+                                <input type="text" class="form-control" id="studentClassNew">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                        <button type="button" class="btn btn-primary" id="saveButton">确认</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.modal -->
+    </div>
+
+    <!-- ##### Hero Area Start ##### -->
+    <section class="hero-area bg-img bg-overlay-2by5" style="background-image: url(dist/img/bg1.jpg);">
+        <div class="container h-100">
+            <div class="row h-100 align-items-center">
+                <div class="col-12">
+                    <!-- Hero Content -->
+                    <div class="hero-content text-center">
+                        <h2>Let's Study Together</h2>
+                        <button class="btn clever-btn" id="myClass">我的课程</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- ##### Hero Area End ##### -->
+
+    <!-- ##### Popular Courses Start ##### -->
+    <section class="popular-courses-area section-padding-100-0" style="background-image: url(dist/img/core-img/texture.png);">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="section-heading">
+                        <h3 style="font-weight: 700">课&nbsp&nbsp&nbsp程&nbsp&nbsp&nbsp列&nbsp&nbsp&nbsp表</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <!-- 课程显示 -->
+                <th:block th:each="course:${courses}">
+                    <div class="col-12 col-md-6 col-lg-4" style="margin-bottom: 20px">
+                        <div class="single-popular-course mb-100 ">
+                            <div style="float: left;display:block;box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);border-radius:0 0 6px 6px">
+                                <img src="dist/img/bg-img/c1.jpg" alt="" id="img" th:src="${course.imageURL}" style="height: 150px;width: 350px">
+                                <!-- Course Content -->
+                                <div class="course-content" style="width: 350px">
+                                    <h5 id="courseName" th:text="${course.courseName}">课程名称</h5>
+                                    <div class="meta d-flex align-items-center">
+                                        <span style="font-size: 14px">教师：</span>
+                                        <span style="font-size: 14px" id="teacherName" th:text="${course.teacher.teacherName}">教师姓名</span>
+                                    </div>
+                                    <p class="contentFlow" id="description" th:text="${course.description}">课程简介</p>
+                                </div>
+                                <!-- Seat Rating Fee -->
+                                <div class="seat-rating-fee d-flex justify-content-between">
+                                    <div class="seat-rating h-100 d-flex align-items-center" style="margin-left: 20px">
+                                        <span style="font-size: 14px">发布时间：</span>
+                                        <span style="font-size: 14px" id="releaseTime" th:text="${#dates.format(course.uploadTime,'yyyy-MM-dd')}">xxxx-xx-xx</span>
+                                    </div>
+                                    <div class="course-fee h-100">
+                                        <a th:href="@{'/courses/detail/'+${course.id}}+'.html'" class="free" target="_blank">开始学习</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </th:block>
+            </div>
+        </div>
+    </section>
+
+    <!-- ##### Footer Area Start ##### -->
+    <footer class="footer-area">
+        <!-- Top Footer Area -->
+        <div class="top-footer-area">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <!-- Footer Logo -->
+                        <div class="footer-logo">
+                            <a href="#"><img th:src="@{/dist/img/logo2.png}" alt="" src="dist/img/logo2.png"></a>
+                        </div>
+                        <!-- Copywrite -->
+                        <p><a href="#"><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                            Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This Web is made by LSC
+                            <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Footer Area -->
+        <div class="bottom-footer-area d-flex justify-content-between align-items-center">
+            <!-- Contact Info -->
+            <div class="contact-info">
+                <a href="#"><span>Phone:</span> +86 18768171767</a>
+                <a href="#"><span>Email:</span> xmblsc@163.com</a>
+            </div>
+            <!-- Follow Us -->
+            <div class="follow-us">
+                <span>Follow us</span>
+                <a href="#"><i class="fa fa-qq" aria-hidden="true"></i></a>
+                <a href="#"><i class="fa fa-weixin" aria-hidden="true"></i></a>
+                <a href="#"><i class="fa fa-weibo" aria-hidden="true"></i></a>
+            </div>
+        </div>
+    </footer>
+    <!-- ##### Footer Area End ##### -->
+
+    <!-- ##### All Javascript Script ##### -->
+    <!-- jQuery-2.2.4 js -->
+    <script src="plugins/jquery/jquery.min.js"></script>
+    <!-- Popper js -->
+    <script src="plugins/popper/popper.min.js" type="module"></script>
+    <!-- Bootstrap js -->
+    <script src="plugins/bootstrap/js/bootstrap.min.js"></script>
+    <!-- All Plugins js -->
+    <script src="plugins/plugins.js"></script>
+    <script src="plugins/sweetalert/sweetalert.min.js"></script>
+    <!-- Active js -->
+    <script src="dist/js/active.js"></script>
+    <script src="dist/js/adminlte.js"></script>
+    <script type="text/javascript">
+
+        $('#myClass').click(function () {
+            swal({
+                title:"请您先登录",
+                icon:"warning",
+                buttons: {
+                    cancel: "取消",
+                    confirm:{
+                        text:"登录",
+                        className:"confirmClass",
+                    }
+                },
+            }).then(function (isOk) {
+                if(!isOk){//如果点击取消
+                    swal.close();
+                }else{
+                    window.location.href = "login.html";
+                }
+            })
+        })
+
+        function registered(){
+            //隐藏错误提示框
+            $('.alert-danger').css("display", "none");
+            reset();
+            $("#modalRegister").modal('show');
+        }
+
+        $('#saveButton').click(function () {
+            var userName = $('#userNameNew').val();
+            var password = $('#passwordNew').val();
+            var studentID = $('#studentIDNew').val();
+            var studentSex = $("input[name='userSex']:checked").val();
+            var studentClass = $('#studentClassNew').val();
+            var data = {"studentName": userName, "studentPassword": password,"studentID":studentID,
+                "studentSex":studentSex,"studentClass":studentClass};
+            $.ajax({
+                type: 'POST',//方法类型
+                dataType: "json",//预期服务器返回的数据类型
+                url: '../students/save',//url
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(data),
+                success: function (result) {
+                    if (result.resultCode == 200) {
+                        swal("注册成功",{
+                            icon:"success",
+                        });
+                        $('#modalRegister').modal('hide');
+                    }
+                    else {
+                        swal(result.message,{
+                            icon:"error",
+                        });
+                    }
+                    ;
+                },
+                error: function () {
+                    swal("操作失败",{
+                        icon:"error",
+                    });
+                }
+            });
+
+        })
+
+        /**
+         * 重置 使得上一次输入的内容在重新打开输入框时被清除
+         **/
+        function reset() {
+            $('#userNameNew').val('');
+            $('#passwordNew').val('');
+            $('#studentClassNew').val('');
+            $('#studentIDNew').val('');
+            $('#sex1').removeClass("active");
+            $('#sex2').removeClass("active");
+
+        }
+    </script>
+</body>
+
+</html>

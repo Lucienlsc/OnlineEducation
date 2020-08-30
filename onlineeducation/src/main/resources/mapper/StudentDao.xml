@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.onlineeducation.onlineeducation.dao.StudentDao">
+    <resultMap type="com.onlineeducation.onlineeducation.entity.Student" id="StudentResult">
+        <id property="id" column="sid" jdbcType="BIGINT"/>
+        <result property="studentClass" column="sclass" jdbcType="VARCHAR"/>
+        <result property="studentID" column="studentID" jdbcType="VARCHAR"/>
+        <result property="studentName" column="sname" jdbcType="VARCHAR"/>
+        <result property="studentPassword" column="spassword" jdbcType="VARCHAR"/>
+        <result property="studentSex" column="ssex" jdbcType="VARCHAR"/>
+        <result property="isDeleted" column="is_deleted" jdbcType="TINYINT"/>
+        <result property="studentToken" column="stoken" jdbcType="VARCHAR"/>
+        <!--property是entity里面的字符名，column是数据库里的字段名-->
+    </resultMap>
+
+    <select id="getStudentUserByStudentIDAndPassword" resultMap="StudentResult">
+        select sid,sname from student where studentID = #{studentID} and spassword = #{studentPassword}  and is_deleted = 0 limit 1
+    </select>
+
+    <select id="getStudentUserByStudentID" resultMap="StudentResult">
+		select sname,sid
+		from student
+        where studentID = #{studentID}
+		ORDER BY sid DESC limit 1
+	</select>
+
+    <update id="updateStudentUserToken">
+        update student set stoken = #{newToken} where sid =#{userId}
+    </update>
+
+
+    <select id="findStudentUsers" parameterType="Map" resultMap="StudentResult">
+        select * from student
+        where is_deleted=0
+        order by sid desc
+        <if test="start!=null and limit!=null">
+            limit #{start},#{limit}
+        </if>
+    </select>
+
+    <select id="getTotalStudentUser" parameterType="Map" resultType="int">
+        select count(*) from student
+        where is_deleted=0
+    </select>
+
+    <select id="getStudentUserByUserName" resultMap="StudentResult">
+        select sid,sname,stoken
+        from student
+        where sname = #{userName}
+        and is_deleted = 0
+        ORDER BY sid DESC limit 1
+    </select>
+
+    <select id="getStudentUserById" resultMap="StudentResult">
+        select sname,stoken
+        from student
+        where sid = #{id}
+        and is_deleted = 0
+        ORDER BY sid DESC limit 1
+    </select>
+
+    <insert id="addStudentUser" parameterType="com.onlineeducation.onlineeducation.entity.Student">
+        insert into student(sname,spassword,studentID,ssex,sclass)
+        value (#{studentName},#{studentPassword},#{studentID},#{studentSex},#{studentClass})
+    </insert>
+
+    <update id="updateStudentPassword">
+        update student set spassword = #{newPassword} ,stoken = '' where sid =#{userId} and is_deleted = 0
+    </update>
+
+    <update id="deleteStudentBatch">
+        update student
+        set is_deleted=1 where sid in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
+    <select id="getSelectedStudents" parameterType="int" resultMap="StudentResult">
+        select sid,sname from student
+        where sid in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+
+    <select id="getStudentUserByToken" resultMap="StudentResult">
+		select sid,sname,stoken
+		from student
+        where stoken = #{userToken}
+		ORDER BY sid DESC limit 1
+	</select>
+
+
+
+</mapper>

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.onlineeducation.onlineeducation.dao.CourseDao">
+    <resultMap type="com.onlineeducation.onlineeducation.entity.Course" id="CourseResult">
+        <result property="id" column="cid"/>
+        <result property="courseName" column="cname"/>
+        <result property="teacherID" column="tid"/>
+        <result property="uploadTime" column="uploadTime" jdbcType="TIMESTAMP"/>
+        <result property="imageURL" column="cimageURL"/>
+        <result property="isDeleted" column="is_deleted"/>
+        <result property="description" column="cdescription"/>
+        <result property="isChecked" column="is_checked"/>
+
+        <association property="teacher" column="tid" javaType="com.onlineeducation.onlineeducation.entity.Teacher">
+            <id property="id" column="tid"/>
+            <result property="teacherName" column="tname"/>
+            <result property="isDeleted" column="is_deleted" jdbcType="TINYINT"/>
+        </association>
+        
+        <collection property="listStudent" ofType="com.onlineeducation.onlineeducation.entity.Student">
+            <id property="id" column="sid"/>
+            <result property="studentName" column="sname"/>
+        </collection>
+
+    </resultMap>
+
+    <select id="findMyCourseList" parameterType="Map" resultMap="CourseResult">
+        select *
+        from course c left join stu_course sc on c.cid = sc.cid left join student s on sc.sid = s.sid left join teacher t on c.tid = t.tid
+        where s.sid = #{sid} and c.is_checked = '通过'
+    </select>
+
+    <select id="findCourseInTeacher" parameterType="Map" resultMap="CourseResult">
+        select * from course c,teacher t
+        where c.tid = t.tid and c.is_deleted = 0 and t.is_deleted=0 and c.tid=#{teacherID}
+        order by c.cid desc
+        <if test="start!=null and limit!=null">
+            limit #{start},#{limit}
+        </if>
+    </select>
+
+    <select id="getTotalCourseInTeacher" parameterType="Map" resultType="int">
+        select count(*) from course
+        where is_deleted=0 and tid=#{teacherID}
+    </select>
+
+    <select id="getCourseByCourseName" resultMap="CourseResult">
+        select cid,cname
+        from course
+        where cname = #{courseName}
+        and is_deleted = 0
+        ORDER BY cid DESC limit 1
+    </select>
+
+    <select id="findCourseInAdmin" parameterType="Map" resultMap="CourseResult">
+        select * from course c,teacher t
+        where c.tid = t.tid and c.is_deleted = 0 and t.is_deleted=0
+        order by c.cid desc
+        <if test="start!=null and limit!=null">
+            limit #{start},#{limit}
+        </if>
+    </select>
+
+    <select id="getTotalCourseInAdmin" parameterType="Map" resultType="int">
+        select count(*) from course
+        where is_deleted=0
+    </select>
+
+    <select id="findCourseList" parameterType="Map" resultMap="CourseResult">
+        select * from course c,teacher t
+        where c.tid = t.tid and c.is_deleted = 0 and t.is_deleted=0 and c.is_checked = '通过'
+        order by c.cid desc
+    </select>
+
+    <select id="findTeacherCourses" parameterType="Map" resultMap="CourseResult">
+        select c.cid,c.cname from course c,teacher t
+        where c.tid = #{tid} and t.tid = #{tid} and c.is_deleted = 0 and t.is_deleted=0
+        order by c.cid desc
+    </select>
+
+    <insert id="addCourse" parameterType="com.onlineeducation.onlineeducation.entity.Course">
+        insert into course(cname,tid,cimageURL,cdescription)
+        value (#{courseName},#{teacherID},#{imageURL},#{description})
+    </insert>
+
+    <update id="checkCourse" >
+        update course
+        set is_checked = #{isChecked} where cid = #{courseId} and is_deleted = 0
+    </update>
+
+    <select id="findCourseById" parameterType="int" resultMap="CourseResult">
+        select * from course c ,teacher t
+        where c.cid=#{id} and c.is_deleted=0
+    </select>
+
+    <update id="deleteCourseBatch">
+        update course
+        set is_deleted=1 where cid in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
+
+    <update id="updateCourse" parameterType="com.onlineeducation.onlineeducation.entity.Course">
+        update course
+        set
+        cimageURL=#{imageURL},cname=#{courseName},cdescription=#{description}
+        where cid=#{id} and is_deleted=0
+    </update>
+</mapper>

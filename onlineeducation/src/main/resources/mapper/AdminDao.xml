@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.onlineeducation.onlineeducation.dao.AdminDao">
+    <resultMap type="com.onlineeducation.onlineeducation.entity.Admin" id="AdminResult">
+        <id property="id" column="aid" jdbcType="BIGINT"/>
+        <result property="adminName" column="aname" jdbcType="VARCHAR"/>
+        <result property="adminPassword" column="apassword" jdbcType="VARCHAR"/>
+        <result property="adminToken" column="atoken" jdbcType="VARCHAR"/>
+<!--property是entity里面的字符名，column是数据库里的字段名-->
+    </resultMap>
+
+    <select id="getAdminUserByUserNameAndPassword" resultMap="AdminResult">
+        select aid,aname from admin where aname = #{adminName} and apassword = #{adminPassword} limit 1
+    </select>
+
+    <update id="updateAdminUserToken">
+        update admin set atoken = #{newToken} where aid =#{userId}
+    </update>
+
+    <select id="getAdminUserByToken" resultMap="AdminResult">
+		select aid,aname,atoken
+		from admin
+        where atoken = #{userToken}
+		ORDER BY aid DESC limit 1
+	</select>
+
+
+</mapper>
